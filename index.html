@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AEGIS ORACLE — OAuth</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 680px;
+      margin: 80px auto;
+      padding: 24px;
+      color: #0b2347;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 30px #0001;
+    }
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #0b2347;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>AEGIS ORACLE</h1>
+    <p id="status">Verificando autorização...</p>
+    <button id="copiar" hidden>Copiar URL de autorização</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const status = document.getElementById("status");
+    const botao = document.getElementById("copiar");
+
+    if (params.has("code") && params.has("state")) {
+      status.textContent =
+        "Autorização recebida. Copie a URL e retorne ao PowerShell.";
+      botao.hidden = false;
+
+      botao.onclick = async () => {
+        await navigator.clipboard.writeText(location.href);
+        botao.textContent = "URL copiada";
+      };
+    } else if (params.has("error")) {
+      status.textContent = "A autorização foi recusada ou apresentou erro.";
+    } else {
+      status.textContent = "Callback seguro do AEGIS ORACLE.";
+    }
+  </script>
+</body>
+</html>
